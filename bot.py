@@ -1,51 +1,47 @@
-"""
-Реализовать эхо бота с использование Telegram bot api. Бот должен не только принимать сообщения, но и изображения
-"""
-import requests
+import asyncio
+import logging
+
+from aiogram import Bot, Dispatcher, types
+from aiogram.utils.exceptions import BotBlocked
 
 from config import TOKEN
 
-BASE_URL = f'https://api.telegram.org/bot{TOKEN}'
-ADMINS = [381762408, ]  # Тут ваш id
+logging.basicConfig(level=logging.INFO)
+
+bot = Bot(token=TOKEN)
+dp = Dispatcher(bot)
 
 
-def pulling():
-    count_message = 0
-    while True:
-        response = requests.get(f'{BASE_URL}/getUpdates').json()
-        if count_message != len(response['result']):
-            count_message = len(response['result'])
-            try:
-                message = response['result'][-1]['message']
-                chat_id = message['chat']['id']
-
-                json_keyboard = {
-                    'method': 'sendMessage',
-                    'chat_id': chat_id,
-                    'text': 'Какая-то клавиатура',
-                    'reply_markup': {
-
-                        'keyboard': [
-                            [
-                                {
-                                    'text': 'YeaS',
-                                },
-                                {
-                                    'text': 'No!',
-                                },
-                            ],
-                            [
-                                'Ряд 2',
-                            ],
-
-                        ]
-                    },
-                    'resize_keyboard': True,
-                    'one_time_keyboard': False,
-                }
-                requests.post(f'{BASE_URL}/', json=json_keyboard)
-            except Exception as error:
-                print(f'Случилась ошибка: {error}')
+@dp.errors_handler(exception=BotBlocked)
+async def blocked_bot(update: types.Update, exception: BotBlocked):
+    print(f'Меня заблокировали. msg: {update}, exception: {exception}')
+    return True
 
 
-pulling()
+@dp.message_handler(commands=['start'])
+async def command_start(msg: types.Message):
+    await msg.reply('reply')
+    await msg.answer('answer')
+    await bot.send_message(chat_id=msg.from_user.id, text='send_message')
+
+
+@dp.message_handler(commands=['help'])
+async def command_test(msg: types.Message):
+    await msg.reply('я не могу что-то подсказать')
+
+
+@dp.message_handler(commands=['dice'])
+async def dice(msg: types.Message):
+    await msg.answer_dice(emoji='🎲', )
+
+
+@dp.message_handler()
+async def echo_bot(msg: types.Message):
+    await asyncio.sleep(7)
+    await msg.answer(f'Это это ответ вам: {msg.text}')
+
+
+if __name__ == '__main__':
+    from aiogram import executor
+
+    executor.start_polling(dp, skip_updates=True)
