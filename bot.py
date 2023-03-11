@@ -1,5 +1,7 @@
+# https://core.telegram.org/bots/api#markdownv2-style
 import asyncio
 import logging
+import os
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.utils.exceptions import BotBlocked
@@ -7,38 +9,42 @@ from aiogram.utils.exceptions import BotBlocked
 from config import TOKEN
 
 logging.basicConfig(level=logging.INFO)
-
-bot = Bot(token=TOKEN)
+bot = Bot(token=TOKEN, parse_mode='MarkdownV2')
 dp = Dispatcher(bot)
 
 
 @dp.errors_handler(exception=BotBlocked)
-async def blocked_bot(update: types.Update, exception: BotBlocked):
-    print(f'Меня заблокировали. msg: {update}, exception: {exception}')
+async def blocked(update: types.Update, exc: BotBlocked):
+    print(f'Пользователь кинул в блок. error: {exc}\n {update}')
     return True
 
 
 @dp.message_handler(commands=['start'])
 async def command_start(msg: types.Message):
     await msg.reply('reply')
-    await msg.answer('answer')
-    await bot.send_message(chat_id=msg.from_user.id, text='send_message')
 
 
 @dp.message_handler(commands=['help'])
+async def command_help(msg: types.Message):
+    await msg.answer('Какой\-то *текст* с подсказками')
+
+
+@dp.message_handler(commands=['test'])
 async def command_test(msg: types.Message):
-    await msg.reply('я не могу что-то подсказать')
+    await asyncio.sleep(10)
+    await msg.reply('Какой\-то тест')
+
+@dp.message_handler(commands=['mark'])
+async def command_test(msg: types.Message):
+    await msg.reply('Какой-то тест')
 
 
-@dp.message_handler(commands=['dice'])
-async def dice(msg: types.Message):
-    await msg.answer_dice(emoji='🎲', )
-
-
-@dp.message_handler()
-async def echo_bot(msg: types.Message):
-    await asyncio.sleep(7)
-    await msg.answer(f'Это это ответ вам: {msg.text}')
+@dp.message_handler(content_types=types.ContentType.PHOTO)
+async def echo(msg: types.Message):
+    photo = msg.photo[-1]
+    photo_obj = await photo.download()
+    await msg.answer_photo('https://www.python.org/static/img/python-logo@2x.png')
+    os.remove(photo_obj.name)
 
 
 if __name__ == '__main__':
