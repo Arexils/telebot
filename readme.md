@@ -1,6 +1,9 @@
 ## Структура для сдачи ДЗ телеграм ботов
 
-Бот [@arexils_innopolis_bot](https://t.me/arexils_innopolis_bot) - кто желает, можете во время занятия потыкать
+* Бот [@arexils_innopolis_bot](https://t.me/arexils_innopolis_bot) - кто желает, можете во время занятия потыкать
+* [Документация API telegram](https://core.telegram.org/bots/api)
+* [Hosting для бота](https://www.pythonanywhere.com/)
+
 
 1. Вы должны создать в корне проекта файла `.env`
 2. В него написать `TOKEN=` после знака `=` вставить ваш токен.
@@ -20,6 +23,7 @@
             * ❗ Если у вас в консоле ошибка с выполнениями скриптов [Ссылка на решение проблемы](https://ru.stackoverflow.com/a/1041525) и сама команда на всякий случай `Set-ExecutionPolicy Unrestricted`
 3. После того как вы зашли в виртуальное окружение `venv`, вы должны установить зависимости из файла `requirements.txt`. Каждая новая зависимость должна начинаться с новой строки.
 4. Команда установки `pip install -r requirements.txt`
+5. Команда запуска бота `python bot.py` - т.к. у меня называется файл `bot.py`
 
 ### Как сдавать проект?
 
