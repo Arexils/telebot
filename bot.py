@@ -1,5 +1,6 @@
 import logging
 
+import requests
 from aiogram import Bot, Dispatcher, types
 
 from config import TOKEN
@@ -37,6 +38,12 @@ async def command_info_profile(msg: types.Message):
         f'<b>Chat ID: </b> {msg.chat.id}\n'
     )
     await msg.answer(text)
+
+
+@dp.message_handler(commands=['funny'])
+async def command_funny(msg: types.Message):
+    response = requests.get('https://aws.random.cat/meow').json().get('file')
+    await msg.answer_photo(response)
 
 
 if __name__ == '__main__':
