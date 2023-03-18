@@ -4,16 +4,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import webhook
 
-from config import TOKEN
-
-# настройки webhook
-WEBHOOK_HOST = 'https://10ed-95-84-236-95.eu.ngrok.io'
-WEBHOOK_PATH = ''
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
-
-# настройки веб сервера
-WEBAPP_HOST = '127.0.0.1'  # or ip
-WEBAPP_PORT = 8000
+from config import TOKEN, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(
@@ -25,18 +16,19 @@ dp.middleware.setup(LoggingMiddleware())
 
 
 async def on_startup(dp):
+    logging.info('Setting webhook :D')
     await bot.set_webhook(WEBHOOK_URL)
 
 
 async def on_shutdown(dp):
-    logging.warning('Shutting down..')
+    logging.info('Shutting down..')
     await bot.delete_webhook()
-    logging.warning('Bye!')
+    logging.info('Bye!')
 
 
 @dp.message_handler(commands=['start'])
 async def command_start(msg: types.Message):
-    return webhook.SendMessage(msg.chat.id, msg.text)
+    return webhook.SendMessage(msg.chat.id, 'Добро пожаловать!')
 
 
 @dp.message_handler(commands=['help'])
@@ -54,10 +46,10 @@ if __name__ == '__main__':
 
     executor.start_webhook(
         dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
+        skip_updates=True,
         on_startup=on_startup,
         on_shutdown=on_shutdown,
-        skip_updates=True,
+        webhook_path=WEBHOOK_PATH,
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
     )

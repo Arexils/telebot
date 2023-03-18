@@ -2,7 +2,9 @@
 
 * Бот [@arexils_innopolis_bot](https://t.me/arexils_innopolis_bot) - кто желает, можете во время занятия потыкать
 * [Документация API telegram](https://core.telegram.org/bots/api)
-* [Hosting для бота](https://www.pythonanywhere.com/)
+* [pythonanywhere хостинг бота](https://www.pythonanywhere.com/)
+* [Ngrok](https://ngrok.com/)
+* [Railway](https://railway.app)
 
 
 1. Вы должны создать в корне проекта файла `.env`
