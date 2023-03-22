@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 from config import TOKEN
-from utils import knd_logic
+from utils import knd_logic, RPS
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
@@ -33,7 +33,12 @@ async def knb(message: types.Message):
 
     # Set state
     await Form.name.set()
-    await message.reply("Send me your name")
+    await message.reply(
+        (
+            f'Введите предмет для игры к КНБ\n'
+            f'[{", ".join(RPS)}]: '
+        )
+    )
 
 
 # You can use state='*' if you want to handle all states
@@ -57,7 +62,8 @@ async def process_name(message: types.Message, state: FSMContext):
 
     # Finish our conversation
     await state.finish()
-    await message.reply(f"Hello, {knd_logic(message.text)}")  # <-- Here we get the name
+    result, bot_selection = knd_logic(message.text)
+    await message.reply(f'Бот выбрал: {bot_selection}.\nПобедитель: {result}')  # <-- Here we get the name
 
 
 if __name__ == '__main__':

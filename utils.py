@@ -1,10 +1,10 @@
 import logging
 from random import choice
 
+RPS = ['камень', 'ножницы', 'бумага']
 
 # TODO: Для доп ДЗ необходимо оптимизировать данный код
 def knd_logic(user_selection):
-    RPS = ['камень', 'ножницы', 'бумага']
 
     if user_selection.lower() in RPS:
         bot_selection = choice(RPS)  # выбор бота
@@ -31,5 +31,5 @@ def knd_logic(user_selection):
             result = "бот"
         elif user_selection == "бумага" and bot_selection == "бумага":
             result = "ничья"
-        return result
+        return result, bot_selection
     return None
