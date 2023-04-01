@@ -1,5 +1,6 @@
 import os
 
+from aiogram import types
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,3 +19,14 @@ WEBAPP_PORT = 8000
 
 if not TOKEN:
     exit('Error: no token provided')
+
+COMMANDS = [
+    types.BotCommand('start', 'Стартуем!'),
+    types.BotCommand('meow', 'Случайное фото котиков'),
+    types.BotCommand('dice', 'Бросить кости'),
+    types.BotCommand('fetchone', 'Получение одной записи БД'),
+    types.BotCommand('fetchall', 'Получение всех ваших записей БД'),
+    types.BotCommand('info', 'Информационная карточка профиля'),
+    types.BotCommand('info_2', 'Информационная карточка профиля'),
+    types.BotCommand('poll', 'Запустить голосование'),
+]
