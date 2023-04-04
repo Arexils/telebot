@@ -2,7 +2,7 @@ import sqlite3
 
 
 def create_table():
-    with sqlite3.connect('../database.db') as connection:
+    with sqlite3.connect('database.db') as connection:
         cur = connection.cursor()
         cur.execute(
             """
@@ -19,6 +19,24 @@ def create_table():
                user_id INT,
                chat_id INT,
                message TEXT);
+            """
+        )
+        cur.execute(
+            """
+               CREATE TABLE IF NOT EXISTS history_cats(
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               user_id INTEGER,
+               timestamp INTEGER,
+               url TEXT);
+            """
+        )
+        cur.execute(
+            """
+               CREATE TABLE IF NOT EXISTS block_list(
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               user_id INTEGER,
+               timestamp INTEGER,
+               reason TEXT);
             """
         )
         connection.commit()
