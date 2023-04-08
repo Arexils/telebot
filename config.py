@@ -29,4 +29,5 @@ COMMANDS = [
     types.BotCommand('info', 'Информационная карточка профиля'),
     types.BotCommand('info_2', 'Информационная карточка профиля'),
     types.BotCommand('poll', 'Запустить голосование'),
+    types.BotCommand('ban', 'Забанить'),
 ]
