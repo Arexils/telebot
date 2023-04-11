@@ -3,6 +3,7 @@ import sqlite3
 from aiogram import types
 
 from loader import dp
+from utils.keyborads.task import KeyboardMain
 
 
 @dp.message_handler(commands=['start', ])
@@ -27,6 +28,6 @@ async def command_start(msg: types.Message):
                 )
             )
             conn.commit()
-            await msg.answer('Добро пожаловать!')
+            await msg.answer(f'Добро пожаловать {username}!\nВыбери нужное', reply_markup=KeyboardMain())
         else:
             await msg.answer('Ну привет!')
