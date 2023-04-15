@@ -27,3 +27,32 @@ async def member_off(msg: types.Message):
             )
             conn.commit()
         await msg.answer('Пользователь добавлен в бон!')
+
+
+@dp.message_handler(commands='blockme')
+async def blockme(msg: types.Message):
+    with sqlite3.connect('database.db') as conn:
+        cur = conn.cursor()
+        cur.execute(
+            f"""
+            insert into block_list(user_id, timestamp, reason) values (?,?,?)
+            """,
+            (
+                msg.from_user.id,
+                msg.date.timestamp(),
+                'Само бан',
+            )
+        )
+
+
+@dp.message_handler(commands='unblock')
+async def unblock(msg: types.Message):
+    with sqlite3.connect('database.db') as conn:
+        cur = conn.cursor()
+        cur.execute(
+            f"""
+            delete from block_list where user_id={msg.from_user.id}
+            """
+        )
+        conn.commit()
+    await msg.answer('unblock')
