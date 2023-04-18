@@ -10,9 +10,8 @@ from loader import dp
 
 @dp.message_handler(commands=['meow'])
 async def photo_meow(msg: types.Message):
-    response = requests.get('https://cataas.com/cat?json=true').json().get('url')
-    build_url = f'https://cataas.com{response}'
-    data = (msg.from_user.id, msg.date.timestamp(), build_url)
+    response = requests.get('https://api.thecatapi.com/v1/images/search?format=json').json()[0].get('url')
+    data = (msg.from_user.id, msg.date.timestamp(), response)
     with sqlite3.connect(database='database.db') as conn:
         cur = conn.cursor()
         cur.execute(
@@ -22,7 +21,7 @@ async def photo_meow(msg: types.Message):
             data
         )
         conn.commit()
-    await msg.answer_photo(build_url)
+    await msg.answer_photo(response)
 
 
 @dp.message_handler(commands=['dice'], )
