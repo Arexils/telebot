@@ -6,12 +6,12 @@ from utils.keyborads.dev_inline import kb_inline, inline_kb_full
 
 
 @dp.message_handler(commands=['kb_inline', ])
-async def command_start(msg: types.Message):
+async def command_button_inline(msg: types.Message):
     await msg.answer('кнопкиииии', reply_markup=kb_inline)
 
 
 @dp.message_handler(commands=['kb_inline_full', ])
-async def command_start(msg: types.Message):
+async def command_full_buttons(msg: types.Message):
     await msg.answer('кнопкиииии', reply_markup=inline_kb_full)
 
 

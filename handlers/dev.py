@@ -5,7 +5,7 @@ from loader import dp
 
 
 @dp.message_handler(commands=['dev', ])
-async def command_start(msg: types.Message):
+async def command_dev(msg: types.Message):
     await msg.answer(
         'кнопкиииии',
         reply_markup=InlineKeyboardMarkup().add(

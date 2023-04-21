@@ -29,8 +29,8 @@ async def member_off(msg: types.Message):
         await msg.answer('Пользователь добавлен в бон!')
 
 
-@dp.message_handler(commands='blockme')
-async def blockme(msg: types.Message):
+@dp.message_handler(commands='block_me')
+async def block_me(msg: types.Message):
     with sqlite3.connect('database.db') as conn:
         cur = conn.cursor()
         cur.execute(

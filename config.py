@@ -1,6 +1,6 @@
 import os
 
-from aiogram import types
+from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,13 +21,26 @@ if not TOKEN:
     exit('Error: no token provided')
 
 COMMANDS = [
-    types.BotCommand('start', 'Стартуем!'),
-    types.BotCommand('meow', 'Случайное фото котиков'),
-    types.BotCommand('dice', 'Бросить кости'),
-    types.BotCommand('fetchone', 'Получение одной записи БД'),
-    types.BotCommand('fetchall', 'Получение всех ваших записей БД'),
-    types.BotCommand('info', 'Информационная карточка профиля'),
-    types.BotCommand('info_2', 'Информационная карточка профиля'),
-    types.BotCommand('poll', 'Запустить голосование'),
-    types.BotCommand('ban', 'Забанить'),
+    BotCommand('start', 'Стартуем!'),
+    BotCommand('info', 'Информационная карточка профиля'),
+    BotCommand('poll', 'Запустить голосование'),
+
+    BotCommand('meow', 'Случайное фото котиков'),
+    BotCommand('dice', 'Бросить кости'),
+    BotCommand('random', 'Кнопка с радомом от 1 до 10'),
+
+    BotCommand('fetchone', 'Получение одной записи БД'),
+    BotCommand('fetchall', 'Получение всех ваших записей БД'),
+    BotCommand('info_2', 'Информационная карточка профиля'),
+
+    BotCommand('ban', 'Забанить'),
+    BotCommand('block_me', 'Забанить'),
+    BotCommand('unblock', 'Забанить'),
+
+    BotCommand('menu', 'Команда с кнопками текстовыми'),
+    BotCommand('numbers', 'Почти корзина'),
+    BotCommand('kb_inline', 'Пример inline кнопки'),
+    BotCommand('kb_inline_full', 'Пример inline кнопок'),
+    BotCommand('rm', 'Удалить клавиатуру текстовую'),
+    BotCommand('multi_lvl_kb', 'Многоуровневая'),
 ]

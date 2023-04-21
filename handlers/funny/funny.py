@@ -32,7 +32,7 @@ async def dice(msg: types.Message):
 
 
 @dp.message_handler(ChatTypeFilter(types.ChatType.PRIVATE), commands=['meow_all'], )
-async def photo_meow(msg: types.Message):
+async def photo_meow_all(msg: types.Message):
     # if msg.chat.type == 'private':
     with sqlite3.connect(database='database.db') as conn:
         cur = conn.cursor()

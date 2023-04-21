@@ -7,8 +7,8 @@ from utils.keyborads.dev_inline import keyboard
 
 
 @dp.message_handler(commands='random')
-async def cmd_random(message: types.Message):
-    await message.answer('Нажмите на кнопку, чтобы бот отправил число от 1 до 10', reply_markup=keyboard)
+async def cmd_random(msg: types.Message):
+    await msg.answer('Нажмите на кнопку, чтобы бот отправил число от 1 до 10', reply_markup=keyboard)
 
 
 @dp.callback_query_handler(text='random_value')
