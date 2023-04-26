@@ -51,7 +51,6 @@ async def start_game_command(callback: CallbackQuery):
     await callback.message.answer('Я загадал число от 1 до 10\nПопробуй угадай его')
     await callback.answer(callback.id)
     await callback.message.delete()
-    logging.info(secret_number)
 
 
 @dp.message_handler(regexp=re.compile(r'^\d+$'))

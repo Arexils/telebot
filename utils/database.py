@@ -39,4 +39,14 @@ def create_table():
                reason TEXT);
             """
         )
+        cur.execute(
+            """
+               CREATE TABLE IF NOT EXISTS polling(
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               user_id INTEGER,
+               vote INTEGER check ( vote in (0,1) ),
+               data TEXT
+               ); 
+            """  # vote == 0 не голосовал
+        )
         connection.commit()
