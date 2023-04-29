@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-ADMINS = (381762408,)  # Тут ваш id
+ADMINS = [381762408, ]  # Тут ваш id
 TOKEN = os.getenv('TOKEN')
 NGROK = os.getenv('NGROK', '')
 

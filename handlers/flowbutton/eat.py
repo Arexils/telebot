@@ -5,7 +5,7 @@ from utils.keyborads.dev import kb
 from utils.keyborads.task import KeyboardDrink, KeyboardSnack, KeyboardMain
 
 
-@dp.message_handler(commands=['menu', ])
+@dp.message_handler(commands=['menu_buttons', ])
 async def get_menu(msg: types.Message):
     await msg.answer('Тектс', reply_markup=kb)
 

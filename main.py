@@ -21,10 +21,12 @@ async def on_shotdown(dp):
 
 if __name__ == '__main__':
     from aiogram import executor
-    from utils.database import create_table
     from handlers import dp
+    from loader import db
 
-    create_table()
+    with db as conn:
+        conn.create_tables()
+
     dp.middleware.setup(SomeMiddleware())
     executor.start_polling(
         dispatcher=dp,
