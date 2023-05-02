@@ -28,7 +28,7 @@ class CategoryState(StatesGroup):
     title = State()
 
 
-class SosState(StatesGroup):
+class HelpState(StatesGroup):
     question = State()
     submit = State()
 
