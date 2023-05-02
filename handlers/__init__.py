@@ -9,6 +9,7 @@ from . import profile
 from . import useful
 from . import moderate
 from . import flowbutton
+from . import events
 
 from . import echo
 
