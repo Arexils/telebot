@@ -13,14 +13,15 @@ from loader import dp, db, bot
 question_cb = CallbackData('question', 'cid', 'action')
 
 
-@dp.message_handler(IsAdmin(), text=questions)
-async def process_questions(msg: Message):
-    await msg.answer_chat_action(ChatActions.TYPING)
+@dp.callback_query_handler(IsAdmin(), text=questions.callback_data)
+async def process_questions(callback: CallbackQuery):
+    await callback.message.answer_chat_action(ChatActions.TYPING)
     with db as conn:
         questions = conn.fetchall('SELECT * FROM questions')
 
     if len(questions) == 0:
-        await msg.answer('Нет вопросов.')
+        await callback.answer('Нет вопросов.')
+        await callback.message.answer('Нет вопросов.')
 
     else:
         for cid, question in questions:
@@ -30,7 +31,8 @@ async def process_questions(msg: Message):
                     callback_data=question_cb.new(cid=cid, action='answer')
                 )
             )
-            await msg.answer(question, reply_markup=markup)
+            await callback.answer(question)
+            await callback.message.answer(question, reply_markup=markup)
 
 
 @dp.callback_query_handler(IsAdmin(), question_cb.filter(action='answer'))
@@ -39,6 +41,7 @@ async def process_answer(callback: CallbackQuery, callback_data: dict, state: FS
 
     await callback.message.answer('Напиши ответ.', reply_markup=ReplyKeyboardRemove())
     await state.set_state(AnswerState.answer.state)
+    await callback.answer('Напиши ответ.')
 
 
 @dp.message_handler(IsAdmin(), state=AnswerState.answer)
@@ -62,11 +65,14 @@ async def process_send_answer(message: Message, state: FSMContext):
 
     with db as conn:
         question = conn.fetchone(
-            'SELECT question FROM questions WHERE cid=?', (cid,))[0]
+            'SELECT question FROM questions WHERE cid=?',
+            (cid,)
+        )[0]
         conn.query('DELETE FROM questions WHERE cid=?', (cid,))
-        text = f'Вопрос: <b>{question}</b>\n\nОтвет: <b>{answer}</b>'
 
         await message.answer('Отправлено!', reply_markup=ReplyKeyboardRemove())
+
+        text = f'Вопрос: <b>{question}</b>\n\nОтвет: <b>{answer}</b>'
         await bot.send_message(cid, text)
 
     await state.finish()

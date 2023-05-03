@@ -8,9 +8,10 @@ from handlers.flowbutton.shop.user.menu import catalog
 from loader import db, dp
 
 
-@dp.message_handler(IsUser(), text=catalog)
-async def process_catalog(msg: Message):
-    await msg.answer(
+@dp.callback_query_handler(IsUser(), text=catalog.callback_data)
+async def process_catalog(callback: CallbackQuery):
+    await callback.answer('Выберите раздел, чтобы вывести список товаров:')
+    await callback.message.answer(
         'Выберите раздел, чтобы вывести список товаров:',
         reply_markup=categories_markup()
     )
@@ -32,6 +33,7 @@ async def category_callback_handler(callback: CallbackQuery, callback_data: dict
         )
 
     await callback.answer('Все доступные товары.')
+    await callback.message.answer('Все доступные товары.')
     await show_products(callback.message, products)
 
 

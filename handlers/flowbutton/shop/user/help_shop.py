@@ -8,7 +8,7 @@ from loader import dp, db
 
 
 @dp.message_handler(commands='help_shop')
-async def cmd_sos(msg: Message, state: FSMContext):
+async def help_shop(msg: Message, state: FSMContext):
     await state.set_state(HelpState.question.state)
     await msg.answer(
         'В чем суть проблемы? Опишите как можно детальнее и администратор обязательно вам ответит.',

@@ -12,20 +12,23 @@ from handlers.flowbutton.shop.user.menu import cart
 from loader import dp, db
 
 
-@dp.message_handler(IsUser(), text=cart)
-async def process_cart(msg: Message, state: FSMContext):
+@dp.callback_query_handler(IsUser(), text=cart.callback_data)
+async def process_cart(callback: CallbackQuery, state: FSMContext):
     with db as conn:
         cart_data = conn.fetchall(
             'SELECT * FROM cart WHERE cid=?',
-            (msg.chat.id,)
+            (callback.message.chat.id,)
         )
 
-        if len(cart_data) == 0:
-            await msg.answer('Ваша корзина пуста.')
+        if cart_data == []:
+            await callback.message.answer('Ваша корзина пуста.')
+            await callback.answer('Ваша корзина пуста.')
         else:
-            await msg.answer_chat_action(ChatActions.TYPING)
+            await callback.message.answer_chat_action(ChatActions.TYPING)
             await state.update_data(products={})
+
             order_cost = 0
+
             for _, idx, count_in_cart in cart_data:
                 product = conn.fetchone('SELECT * FROM products WHERE idx=?', (idx,))
                 if product is None:
@@ -33,23 +36,28 @@ async def process_cart(msg: Message, state: FSMContext):
                 else:
                     _, title, body, image, price, _ = product
                     order_cost += price
-                    await state.update_data(products={idx: [title, price, count_in_cart]})
-                    markup = product_markup(idx, count_in_cart)
+                    await state.update_data(
+                        products={
+                            idx: [title, price, count_in_cart],
+                        }
+                    )
                     text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price}₽.'
 
-                    await msg.answer_photo(
+                    await callback.message.answer_photo(
                         photo=image,
                         caption=text,
-                        reply_markup=markup
+                        reply_markup=product_markup(idx, count_in_cart)
                     )
+                    await callback.answer('')
 
             if order_cost != 0:
-                markup = ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
-                markup.add('📦 Оформить заказ')
-
-                await msg.answer(
+                await callback.answer('Перейти к оформлению?')
+                await callback.message.answer(
                     'Перейти к оформлению?',
-                    reply_markup=markup
+                    reply_markup=ReplyKeyboardMarkup(
+                        resize_keyboard=True,
+                        selective=True
+                    ).add('📦 Оформить заказ')
                 )
 
 
@@ -142,7 +150,7 @@ async def process_check_cart_all_right(msg: Message, state: FSMContext):
 
 @dp.message_handler(IsUser(), text=back_message, state=CheckoutState.name)
 async def process_name_back(message: Message, state: FSMContext):
-    await CheckoutState.check_cart.set()
+    await state.set_state(CheckoutState.check_cart.state)
     await checkout(message, state)
 
 
@@ -203,7 +211,6 @@ async def process_confirm(msg: Message, state: FSMContext):
 @dp.message_handler(IsUser(), text=confirm_message, state=CheckoutState.confirm)
 async def process_confirm(msg: Message, state: FSMContext):
     enough_money = True
-    markup = ReplyKeyboardRemove()
     if enough_money:
         logging.info('Deal was made.')
         with db as conn:
@@ -233,9 +240,15 @@ async def process_confirm(msg: Message, state: FSMContext):
 
             conn.query('DELETE FROM cart WHERE cid=?', (cid,))
             await msg.answer(
-                f'Ок! Ваш заказ уже в пути 🚀\nИмя: <b> {data["name"]} </b>\nАдрес: <b> {data["address"]}  </b>',
-                reply_markup=markup)
+                (
+                    f'Ок! Ваш заказ уже в пути 🚀\n'
+                    f'Имя: <b> {data["name"]} </b>\n'
+                    f'Адрес: <b> {data["address"]}  </b>'
+                ),
+                reply_markup=ReplyKeyboardRemove())
     else:
-        await msg.answer('У вас недостаточно денег на счете. Пополните баланс!',
-                         reply_markup=markup)
+        await msg.answer(
+            'У вас недостаточно денег на счете. Пополните баланс!',
+            reply_markup=ReplyKeyboardRemove(),
+        )
     await state.finish()

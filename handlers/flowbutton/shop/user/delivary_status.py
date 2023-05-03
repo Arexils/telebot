@@ -1,25 +1,26 @@
-from aiogram.types import Message
+from aiogram.types import CallbackQuery
 
 from handlers.flowbutton.shop.filters.filters import IsUser
 from handlers.flowbutton.shop.user.menu import delivery_status
 from loader import db, dp
 
 
-@dp.message_handler(IsUser(), text=delivery_status)
-async def process_delivery_status(msg: Message):
+@dp.callback_query_handler(IsUser(), text=delivery_status.callback_data)
+async def process_delivery_status(callback: CallbackQuery):
     with db as conn:
         orders = conn.fetchall(
             'SELECT * FROM orders WHERE cid=?',
-            (msg.chat.id,)
+            (callback.message.chat.id,)
         )
 
     if len(orders) == 0:
-        await msg.answer('У вас нет активных заказов.')
+        await callback.answer('У вас нет активных заказов.')
+        await callback.message.answer('У вас нет активных заказов.')
     else:
-        await delivery_status_answer(msg, orders)
+        await delivery_status_answer(callback, orders)
 
 
-async def delivery_status_answer(message, orders):
+async def delivery_status_answer(callback, orders):
     res = ''
 
     for order in orders:
@@ -32,4 +33,4 @@ async def delivery_status_answer(message, orders):
 
         res += f'{answer[0]}\n\n'
 
-    await message.answer(res)
+    await callback.message.answer(res)

@@ -57,17 +57,17 @@ async def cmd_start(message: types.Message):
 
 # @dp.callback_query_handler(text=user_button.callback_data)
 # async def user_mode(callback: CallbackQuery):
-#     cid = callback.message.chat.id
+#     cid = callback.callback.chat.id
 #     if cid in config.ADMINS:
 #         config.ADMINS.remove(cid)
 #     await callback.answer('Включен пользовательский режим.')
-#     await callback.message.answer('Включен пользовательский режим.', reply_markup=menu_keyboard)
+#     await callback.callback.answer('Включен пользовательский режим.', reply_markup=menu_keyboard)
 #
 #
 # @dp.callback_query_handler(text=admin_button.callback_data)
 # async def admin_mode(callback: CallbackQuery):
-#     cid = callback.message.chat.id
+#     cid = callback.callback.chat.id
 #     if cid not in config.ADMINS:
 #         config.ADMINS.append(cid)
 #     await callback.answer('Включен админ режим.')
-#     await callback.message.answer('Включен админ режим.', reply_markup=menu_keyboard)
+#     await callback.callback.answer('Включен админ режим.', reply_markup=menu_keyboard)
