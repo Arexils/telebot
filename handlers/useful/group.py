@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher.filters import AdminFilter, IDFilter
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 import config
 from loader import dp
@@ -14,3 +15,13 @@ async def send_poll_to_user(msg: types.Message):
     }
 
     await msg.answer_poll(**poll)
+
+
+@dp.message_handler(commands='extension_translate')
+async def extension_link(msg: Message):
+    await msg.answer(
+        'Расширение которое переводит видео ',
+        reply_markup=InlineKeyboardMarkup().add(
+            InlineKeyboardButton('Ссылка', url='https://github.com/ilyhalight/voice-over-translation')
+        )
+    )
