@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 from config import BASE_URL
@@ -5,13 +7,14 @@ from config import BASE_URL
 
 def pulling():
     data = dict(
+        method='getUpdates',
         offset=0,
         timeout=60,
     )
 
     while True:
         try:
-            req = requests.post(f'{BASE_URL}/getUpdates', data=data, ).json()
+            req = requests.post(f'{BASE_URL}/', data=data, ).json()
         except ValueError:
             continue
         if not req['ok'] or not req['result']:
@@ -21,10 +24,26 @@ def pulling():
                 data['offset'] = r['update_id'] + 1
                 message = r['message']
                 chat_id = message['chat']['id']
+
+                keyboard = json.dumps(
+                    {
+                        'inline_keyboard': [
+                            [
+                                {'text': 'Да', 'callback_data': '1'},
+                                {'text': 'Нет', 'callback_data': '2'},
+                            ],
+                            [
+                                {'text': 'Google', 'url': 'www.google.ru'},
+                            ],
+                        ]
+                    }
+                )
+
                 params = {
                     'method': 'sendMessage',
                     'chat_id': chat_id,
-                    'text': message['text']
+                    'text': message['text'],
+                    'reply_markup': keyboard,
                 }
                 requests.post(f'{BASE_URL}/', data=params)
 
