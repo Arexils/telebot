@@ -11,6 +11,7 @@ from . import moderate
 from . import flowbutton
 from . import events
 from . import post_ad
+from . import films
 
 from . import echo
 

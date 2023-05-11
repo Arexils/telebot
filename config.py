@@ -8,6 +8,7 @@ load_dotenv()
 ADMINS = [381762408, ]  # Тут ваш id
 TOKEN = os.getenv('TOKEN')
 NGROK = os.getenv('NGROK', '')
+KINOPOISK = os.getenv('KINOPOISK', '')
 
 # настройки webhook
 WEBHOOK_PATH = ''
