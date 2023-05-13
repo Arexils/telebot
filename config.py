@@ -9,6 +9,7 @@ ADMINS = [381762408, ]  # Тут ваш id
 TOKEN = os.getenv('TOKEN')
 NGROK = os.getenv('NGROK', '')
 KINOPOISK = os.getenv('KINOPOISK', '')
+PROVIDER_PAYMASTER_TOKEN = os.getenv('PROVIDER_PAYMASTER_TOKEN', '')
 
 # настройки webhook
 WEBHOOK_PATH = ''
