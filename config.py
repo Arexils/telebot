@@ -10,6 +10,7 @@ TOKEN = os.getenv('TOKEN')
 NGROK = os.getenv('NGROK', '')
 KINOPOISK = os.getenv('KINOPOISK', '')
 PROVIDER_PAYMASTER_TOKEN = os.getenv('PROVIDER_PAYMASTER_TOKEN', '')
+SBER = os.getenv('SBER', '')
 
 # настройки webhook
 WEBHOOK_PATH = ''
