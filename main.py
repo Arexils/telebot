@@ -1,31 +1,27 @@
 import logging
-import sqlite3
 
 import config
 from middleware.custom import SomeMiddleware
+from utils.database.core import engine
+from utils.database.model import Base
 
 
 async def on_startup(dp):
     logging.info('new start')
     await dp.bot.set_my_commands(config.COMMANDS)
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 
 async def on_shotdown(dp):
     logging.info('end start')
-
-    with sqlite3.connect('database.db') as conn:
-        cur = conn.cursor()
-        cur.execute(f"""delete from block_list where user_id={config.ADMINS[0]}""")
-        conn.commit()
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.drop_all)
 
 
 if __name__ == '__main__':
     from aiogram import executor
     from handlers import dp
-    from loader import db
-
-    with db as conn:
-        conn.create_tables()
 
     dp.middleware.setup(SomeMiddleware())
     executor.start_polling(

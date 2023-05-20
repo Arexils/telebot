@@ -14,5 +14,6 @@ from . import post_ad
 from . import films
 from . import flow_payments
 from . import sber
+from . import ukassa
 
 from . import echo

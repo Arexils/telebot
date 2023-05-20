@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from config import TOKEN
-from utils.database import DatabaseManager
+from utils.database.core import async_session
 
 logging.basicConfig(level=logging.INFO)
 
@@ -14,4 +14,4 @@ bot = Bot(
 )
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-db = DatabaseManager('database.db')
+db = async_session()

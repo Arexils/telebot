@@ -1,5 +1,6 @@
 import logging
 
+from aiogram.dispatcher.handler import CancelHandler
 from aiogram.types import Update
 from aiogram.utils import exceptions
 
@@ -48,5 +49,9 @@ async def errors_handler(update: Update, exception: exceptions):
 
     if isinstance(exception, exceptions.BadRequest):
         logging.exception(f'CantParseEntities: {exception} \nUpdate: {update}')
+        return True
+
+    if isinstance(exception, CancelHandler):
+        logging.exception(f' edf')
         return True
     logging.exception(f'Update: {update} \n{exception}')
