@@ -15,5 +15,6 @@ from . import films
 from . import flow_payments
 from . import sber
 from . import ukassa
+from . import att_4
 
 from . import echo

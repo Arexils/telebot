@@ -15,16 +15,19 @@ from utils.database.model import User, BlockList
 class SomeMiddleware(BaseMiddleware):
 
     async def on_pre_process_update(self, update: Update, data: dict):
-        async with db as session:
-            if user_query := (
-                    await session.scalars(
-                        select(BlockList).options(joinedload(BlockList.user)).filter(BlockList.is_block == True)
-                                .join(User).filter_by(user=update.message.from_user.id)
-                                .limit(1)
-                    )
-            ).first():
-                logging.info(f'Пользователь {user_query} в ЧС!')
-                raise CancelHandler()
+        try:
+            async with db as session:
+                if user_query := (
+                        await session.scalars(
+                            select(BlockList).options(joinedload(BlockList.user)).filter(BlockList.is_block == True)
+                                    .join(User).filter_by(user=update.message.from_user.id)
+                                    .limit(1)
+                        )
+                ).first():
+                    logging.info(f'Пользователь {user_query} в ЧС!')
+                    raise CancelHandler()
+        except:
+            pass
 
     async def on_process_message(self, message: types.Message, data: dict):
         logging.info(f'{message.from_user.id}: {message.text}')
