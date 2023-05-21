@@ -14,4 +14,4 @@ btn_basic = InlineKeyboardButton('BASIC', callback_data='basic')
 btn_premium = InlineKeyboardButton('PREMIUM', callback_data='premium')
 btn_vip = InlineKeyboardButton('VIP', callback_data='vip')
 
-keyboard_sub = InlineKeyboardMarkup().add(btn_basic, btn_premium, btn_vip, )
+keyboard_sub = InlineKeyboardMarkup().add(btn_basic, btn_premium, btn_vip, ).add(btn_check)
